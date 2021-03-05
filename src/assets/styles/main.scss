@@ -1,0 +1,51 @@
+@import 'reset';
+@import 'fonts';
+
+body {
+  font-family: 'Roboto';
+  background-color: #f1f1f1;
+}
+
+.container {
+  max-width: 1000px;
+  padding: 0 10px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 36px;
+  margin: 0px 0px 60px 0px;
+}
+
+.input-slider-group {
+  margin: 0px 0px 50px 0px;
+  .range-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .range-label {
+      font-size: 18px;
+    }
+    .range-input {
+      border: 1px solid #ccccd7;
+      height: 40px;
+      border-radius: 5px;
+      padding: 0 10px;
+      transition: 0.3s;
+
+      &:focus,
+      &:hover {
+        box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      &::placeholder {
+        color: #151522;
+      }
+    }
+  }
+
+  &:last-child {
+    margin: 0px 0px 0px 0px;
+  }
+}
