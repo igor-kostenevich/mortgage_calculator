@@ -7,12 +7,16 @@
           <div class="input-slider-group">
             <div class="range-info">
               <div class="range-label">Стоимость недвижимости</div>
-              <input class="range-input" type="text" v-model.number="value" />
+              <input
+                class="range-input"
+                type="text"
+                v-model.number="totalCost"
+              />
             </div>
             <el-slider
-              v-model="value"
+              v-model="totalCost"
               :max="3000000"
-              :step="1000"
+              :step="500"
               :show-tooltip="false"
               label="Стоимость недвижимости"
             ></el-slider>
@@ -20,12 +24,16 @@
           <div class="input-slider-group">
             <div class="range-info">
               <div class="range-label">Первоначальный взнос</div>
-              <input class="range-input" type="text" v-model.number="valueV" />
+              <input
+                class="range-input"
+                type="text"
+                v-model.number="initialFee"
+              />
             </div>
             <el-slider
-              v-model.number="valueV"
+              v-model.number="initialFee"
               :max="2000000"
-              :step="1000"
+              :step="500"
               :show-tooltip="false"
               label="Первоначальный взнос"
             ></el-slider>
@@ -35,13 +43,13 @@
               <div class="range-label">Срок кредита</div>
             </div>
             <el-slider
-              v-model="valueSr"
+              v-model="creditTerm"
               :max="216"
               :min="12"
               :step="12"
               :show-tooltip="false"
               label="Срок кредита"
-              :marks="marks"
+              :marks="dataMarks.marks"
               class="el-slider-marks"
             ></el-slider>
           </div>
@@ -54,23 +62,22 @@
             :key="bank.name"
             :class="{ active: bank.isActive }"
             @active-bank="isActiveBank(bank)"
-            >{{ bank.name }}</app-select-bank-item
-          >
+          >{{ bank.name }}</app-select-bank-item>
         </div>
       </div>
       <div class="content__column">
         <div class="show-items">
           <div class="show-item">
             <div class="show-item__label">Сумма кредита</div>
-            <div class="show-item__result">500 500 грн</div>
+            <div class="show-item__result">{{ currency(totalAmountOfCredit) }}</div>
           </div>
           <div class="show-item">
             <div class="show-item__label">Ежемесячный платеж</div>
-            <div class="show-item__result">20 000грн</div>
+            <div class="show-item__result">{{ currency(totalMounthlyPayment) }}</div>
           </div>
           <div class="show-item">
             <div class="show-item__label">Рекомендуемый доход</div>
-            <div class="show-item__result">20 000грн</div>
+            <div class="show-item__result">{{ currency(totalRecommendedIncome) }}</div>
           </div>
         </div>
       </div>
@@ -81,50 +88,57 @@
 <script>
 import AppSelectBankItem from './components/AppSelectBankItem'
 import { ElSlider } from 'element-plus'
+import { currency } from './utils/currency'
 
 export default {
   data () {
     return {
-      value: 0,
-      valueV: 0,
-      valueSr: 12,
-      marks: {
-        12: '12',
-        24: '24',
-        36: '36',
-        48: '48',
-        60: '60',
-        72: '72',
-        84: '84',
-        96: '96',
-        108: '108',
-        120: '120',
-        132: '132',
-        144: '144',
-        156: '156',
-        168: '168',
-        180: '180',
-        192: '192',
-        204: '204',
-        216: '216'
-      },
-      arrMarksItems: [],
-      arrMarksDistance: [],
+      totalCost: 0,
+      initialFee: 0,
+      creditTerm: 12,
       percent: 7,
+      totalAmountOfCredit: 0,
+      totalMounthlyPayment: 0,
+      totalRecommendedIncome: 0,
+      dataMarks: {
+        marks: {
+          12: '12',
+          24: '24',
+          36: '36',
+          48: '48',
+          60: '60',
+          72: '72',
+          84: '84',
+          96: '96',
+          108: '108',
+          120: '120',
+          132: '132',
+          144: '144',
+          156: '156',
+          168: '168',
+          180: '180',
+          192: '192',
+          204: '204',
+          216: '216'
+        },
+        arrMarksItems: [],
+        arrMarksDistance: []
+      },
       selectBanks: [
         { name: 'Приватбанк', rate: 7, isActive: true },
         { name: 'Альфа-банк', rate: 7.5, isActive: false },
         { name: 'Мегабанк', rate: 6.9, isActive: false },
         { name: 'ОТП банк', rate: 7.1, isActive: false },
         { name: 'Ощадбанк', rate: 7.3, isActive: false }
-      ]
+      ],
+      currency
     }
   },
 
   methods: {
     isActiveBank (bank) {
       if (!bank.isActive) {
-        const oldActiveBank = this.selectBanks.find(item => item.isActive)
+        const oldActiveBank = this.selectBanks.find((item) => item.isActive)
         oldActiveBank.isActive = false
         bank.isActive = true
         this.percent = bank.rate
@@ -133,28 +147,38 @@ export default {
   },
 
   mounted () {
-    this.arrMarksItems.push(...document.querySelectorAll('.el-slider__marks-stop'))
-    this.arrMarksItems.forEach((item) => {
+    this.dataMarks.arrMarksItems.push(...document.querySelectorAll('.el-slider__marks-stop'))
+    this.dataMarks.arrMarksItems.forEach((item) => {
       const getStyleMarksDistance = parseFloat(getComputedStyle(item).left)
-      this.arrMarksDistance.push(getStyleMarksDistance)
+      this.dataMarks.arrMarksDistance.push(getStyleMarksDistance)
     })
   },
 
   updated () {
+    // active breakpoint logic for creditTerm input
     if (document.querySelector('.el-slider-marks')) {
       const btnSlider = document.querySelector('.el-slider-marks .el-slider__button-wrapper')
       const getStyleButtonDistance = parseFloat(getComputedStyle(btnSlider).left)
 
-      const arrMarksDone = this.arrMarksItems.filter((item, idx, array) => {
-        if (idx > this.arrMarksDistance.indexOf(getStyleButtonDistance)) {
+      const arrMarksDone = this.dataMarks.arrMarksItems.filter((item, idx) => {
+        if (idx > this.dataMarks.arrMarksDistance.indexOf(getStyleButtonDistance)) {
           item.classList.remove('done')
         }
-        return idx <= this.arrMarksDistance.indexOf(getStyleButtonDistance)
+        return idx <= this.dataMarks.arrMarksDistance.indexOf(getStyleButtonDistance)
       })
 
       arrMarksDone.forEach((item) => {
         item.classList.add('done')
       })
+    }
+
+    // calculator logic
+    this.totalAmountOfCredit = this.totalCost - this.initialFee
+    this.totalMounthlyPayment = Math.floor((this.totalAmountOfCredit + (((this.totalAmountOfCredit / 100) * this.percent) / 12) * this.creditTerm) / this.creditTerm)
+    this.totalRecommendedIncome = this.totalMounthlyPayment + ((this.totalMounthlyPayment / 100) * 35)
+
+    if (this.totalCost < this.initialFee) {
+      this.initialFee = this.totalCost
     }
   },
 
