@@ -1,0 +1,114 @@
+.el-slider {
+  padding: 0 10px;
+
+  .el-slider__runway {
+    height: 20px; // height for main line
+    margin: 23px 0 16px 0;
+    background-color: #e4e7ed;
+    border-radius: 15px;
+    position: relative;
+    cursor: pointer;
+    vertical-align: middle;
+    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.25);
+
+    .el-slider__bar {
+      height: 20px; // height for active line
+      background-color: #1adf2e;
+      border-radius: 15px;
+      position: absolute;
+    }
+
+    .el-slider__button-wrapper {
+      height: 36px;
+      width: 36px;
+      position: absolute;
+      z-index: 1;
+      top: -8px;
+      transform: translateX(-50%);
+      background-color: #fff;
+      text-align: center;
+      border-radius: 50%;
+      box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.4);
+
+      .el-slider__button {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background-color: #1adf2e;
+        vertical-align: middle;
+        border-radius: 50%;
+        box-sizing: border-box;
+        transition: 0.2s;
+      }
+
+      &:after {
+        display: inline-block;
+        content: '';
+        height: 100%;
+        vertical-align: middle;
+      }
+    }
+
+    .el-slider__stop.el-slider__marks-stop {
+      position: absolute;
+      height: 26px;
+      width: 26px;
+      border-radius: 50%;
+      background-color: #e5e5e5;
+      transform: translate(-50%, -11%);
+
+      &.done {
+        background: #1adf2e;
+      }
+
+      &:after {
+        content: '';
+        width: 12px;
+        height: 12px;
+        background: #fff;
+        display: inline-block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+      }
+    }
+
+    .el-slider__stop {
+      background-color: #000;
+    }
+
+    .el-slider__marks {
+      .el-slider__marks-text {
+        position: absolute;
+        transform: translateX(-50%);
+        font-size: 14px;
+        color: #000;
+        margin-top: 40px;
+      }
+    }
+  }
+
+  &.el-slider-marks-mobile {
+    .el-slider__runway {
+      .el-slider__marks-stop{
+        visibility: hidden;
+
+        &:nth-child(3n + 1) {
+          visibility: visible;
+        }
+      }
+
+      .el-slider__marks {
+        .el-slider__marks-text {
+          display: none;
+
+          &:nth-child(3n + 1) {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
