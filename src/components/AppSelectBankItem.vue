@@ -23,6 +23,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 .select-bank__item {
   display: flex;
   justify-content: space-between;

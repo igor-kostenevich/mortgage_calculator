@@ -131,7 +131,7 @@ export default {
           228: '228'
         },
         arrMarksItems: [],
-        arrMarksDistance: []
+        dataMarksInfo: []
       },
       selectBanks: [
         { name: 'Приватбанк', rate: 7, isActive: true },
@@ -143,14 +143,13 @@ export default {
 
       currency,
       windowWidth: window.innerWidth,
-      abc: 0
     }
   },
 
   methods: {
     isActiveBank (bank) {
       if (!bank.isActive) {
-        const oldActiveBank = this.selectBanks.find((item) => item.isActive)
+        const oldActiveBank = this.selectBanks.find(item => item.isActive)
         oldActiveBank.isActive = false
         bank.isActive = true
         this.percent = bank.rate
@@ -160,79 +159,27 @@ export default {
 
   computed: {
     handlerResize () {
-      // if (this.windowWidth < 550) {
-      //   return true
-      // }
       return this.windowWidth < 550
     }
   },
 
   mounted () {
-    this.dataMarks.arrMarksItems.push(
-      ...document.querySelectorAll('.el-slider__marks-stop')
-    )
+    this.dataMarks.arrMarksItems.push(...document.querySelectorAll('.el-slider__marks-stop'))
 
-    this.dataMarks.arrMarksDistance = this.dataMarks.arrMarksItems.map((item) => ({ item }))
-    const arrMarksMarks = Object.values(this.dataMarks.marks).map((item) => +item)
-    this.dataMarks.arrMarksDistance.forEach((item, idx) => {
-      item.marksValue = arrMarksMarks[idx]
-    })
+    this.dataMarks.dataMarksInfo = this.dataMarks.arrMarksItems.map(item => ({ item }))
+    const arrMarksValues = Object.values(this.dataMarks.marks).map(item => +item)
+    this.dataMarks.dataMarksInfo.forEach((item, idx) => item.marksValue = arrMarksValues[idx])
 
-    console.log(this.dataMarks.arrMarksDistance)
-
-    // const getMarksDistanceFn = () => {
-    //   this.dataMarks.arrMarksItems.forEach(item => {
-    //     const getStyleMarksDistance = parseFloat(getComputedStyle(item).left)
-    //     this.dataMarks.arrMarksDistance.push(getStyleMarksDistance)
-    //   })
-    // }
-    // getMarksDistanceFn()
-
-    window.onresize = (e) => {
-      this.windowWidth = window.innerWidth
-
-      // this.dataMarks.arrMarksDistance.length = 0
-      // getMarksDistanceFn()
-    }
-
-    // this.dataMarks.arrMarksItems = [...document.querySelectorAll('.el-slider__marks-stop')]
-
-    // const aa = Object.values(this.dataMarks.marks) !
-
-    // this.dataMarks.arrMarksDistance = Object.values(this.dataMarks.arrMarksItems).map(item => ({mark: item, isDone: false})) !
+    window.onresize = e => this.windowWidth = window.innerWidth
   },
 
   watch: {
     creditTerm (elem) {
-      this.dataMarks.arrMarksDistance.forEach((item, idx) => {
-        if (elem >= item.marksValue) {
-          item.item.classList.add('done')
-        } else {
-          item.item.classList.remove('done')
-        }
-        // console.log(item.marksValue);
-      })
-      console.log(this.dataMarks.arrMarksDistance)
+      this.dataMarks.dataMarksInfo.forEach(item => elem >= item.marksValue ? item.item.classList.add('done') : item.item.classList.remove('done'))
     }
   },
 
   updated () {
-    // active breakpoint logic for creditTerm input
-    if (document.querySelector('#el-slider-marks')) {
-
-      // const ss = Object.values(this.dataMarks.marks).map(item => console.log(+item))
-      // const btnSlider = document.querySelector('.el-slider-marks .el-slider__button-wrapper')
-      // // const getStyleButtonDistance = parseFloat(getComputedStyle(btnSlider).left)
-      // this.abc = parseFloat(getComputedStyle(btnSlider).left)
-      // const arrMarksDone = this.dataMarks.arrMarksItems.filter((item, idx) => {
-      //   if (idx > this.dataMarks.arrMarksDistance.indexOf(this.abc)) {
-      //     item.classList.remove('done')
-      //   }
-      //   return idx <= this.dataMarks.arrMarksDistance.indexOf(this.abc)
-      // })
-      // arrMarksDone.forEach(item => item.classList.add('done'))
-    }
-
     // calculator logic
     this.totalAmountOfCredit = this.totalCost - this.initialFee
     this.totalMounthlyPayment = Math.round(
@@ -243,6 +190,24 @@ export default {
     if (this.totalCost < this.initialFee) {
       this.initialFee = this.totalCost
     }
+
+
+
+    // old breakpoint logic for creditTerm input, it's not used
+    
+    // if (document.querySelector('#el-slider-marks')) {
+      // const ss = Object.values(this.dataMarks.marks).map(item => console.log(+item))
+      // const btnSlider = document.querySelector('.el-slider-marks .el-slider__button-wrapper')
+      // // const getStyleButtonDistance = parseFloat(getComputedStyle(btnSlider).left)
+      // this.abc = parseFloat(getComputedStyle(btnSlider).left)
+      // const arrMarksDone = this.dataMarks.arrMarksItems.filter((item, idx) => {
+      //   if (idx > this.dataMarks.dataMarksInfo.indexOf(this.abc)) {
+      //     item.classList.remove('done')
+      //   }
+      //   return idx <= this.dataMarks.dataMarksInfo.indexOf(this.abc)
+      // })
+      // arrMarksDone.forEach(item => item.classList.add('done'))
+    // }
   },
 
   name: 'App',
