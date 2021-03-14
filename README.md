@@ -1,5 +1,8 @@
 # calc_mortgages
 
+### Watch live
+[Click here](https://calculate-mortgages.web.app/).
+
 ## Project setup
 ```
 npm install

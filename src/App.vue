@@ -136,8 +136,8 @@ export default {
       selectBanks: [
         { name: 'Приватбанк', rate: 7, isActive: true },
         { name: 'Альфа-банк', rate: 7.5, isActive: false },
-        { name: 'Мегабанк', rate: 6.9, isActive: false },
-        { name: 'ОТП банк', rate: 7.1, isActive: false },
+        { name: 'Мегабанк', rate: 5.7, isActive: false },
+        { name: 'ОТП банк', rate: 8.1, isActive: false },
         { name: 'Ощадбанк', rate: 7.3, isActive: false }
       ],
 
@@ -194,7 +194,7 @@ export default {
 
 
     // old breakpoint logic for creditTerm input, it's not used
-    
+
     // if (document.querySelector('#el-slider-marks')) {
       // const ss = Object.values(this.dataMarks.marks).map(item => console.log(+item))
       // const btnSlider = document.querySelector('.el-slider-marks .el-slider__button-wrapper')
